@@ -15,7 +15,7 @@ public class ModCreativeTabs {
     private static final DeferredRegister<CreativeModeTab> REGISTRY = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, ExtendedOritech.MODID);
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> TAB = REGISTRY.register("tab", () -> CreativeModeTab.builder()
-        .icon(() -> Blocks.IRON_BLOCK.asItem().getDefaultInstance())
+        .icon(ModBlocks.MACHINE_CORE_INF::asStack)
         .displayItems((ctx, entries) -> {})
         .title(REGISTRATE.addLang("itemGroup", ExtendedOritech.of("tab"), ExtendedOritech.MODNAME))
         .build());
