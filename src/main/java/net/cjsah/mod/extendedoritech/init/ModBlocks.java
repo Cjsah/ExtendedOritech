@@ -11,7 +11,8 @@ import static net.cjsah.mod.extendedoritech.ExtendedOritech.REGISTRATE;
 public class ModBlocks {
 
     public static final BlockEntry<? extends Block> MACHINE_CORE_INF = REGISTRATE
-        .block("machine_core_inf", p -> new MachineCoreBlock(p, Integer.MAX_VALUE - 1))
+        // because float precision loss, quality set to 88888
+        .block("machine_core_inf", p -> new MachineCoreBlock(p, 88888))
         .initialProperties(() -> Blocks.IRON_BLOCK)
         .properties(BlockBehaviour.Properties::noOcclusion)
         .lang("Creative Machine Core")
