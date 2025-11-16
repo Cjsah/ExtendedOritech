@@ -23,13 +23,8 @@ public class OritechBlockEntityMixin {
         )
     )
     private static <T extends BlockEntity> BlockEntityType.Builder<T> inject(BlockEntityType.BlockEntitySupplier<T> supplier, Block[] blocks, Operation<BlockEntityType.Builder<T>> original) {
-        System.out.println("===");
-        System.out.println(Arrays.toString(blocks));
         Block[] extendedBlocks = Arrays.copyOf(blocks, blocks.length + 1);
         extendedBlocks[blocks.length] = ModBlocks.MACHINE_CORE_INF.get();
-        System.out.println("===");
-        System.out.println(Arrays.toString(extendedBlocks));
-
         return original.call(supplier, extendedBlocks);
     }
 
