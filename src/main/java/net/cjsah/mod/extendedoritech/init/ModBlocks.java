@@ -10,8 +10,8 @@ import static net.cjsah.mod.extendedoritech.ExtendedOritech.REGISTRATE;
 
 public class ModBlocks {
 
-    public static final BlockEntry<? extends Block> CHARACTER = REGISTRATE
-        .block("machine_core_inf", p -> new MachineCoreBlock(p, 10))
+    public static final BlockEntry<? extends Block> MACHINE_CORE_INF = REGISTRATE
+        .block("machine_core_inf", p -> new MachineCoreBlock(p, Integer.MAX_VALUE))
         .initialProperties(() -> Blocks.IRON_BLOCK)
         .properties(BlockBehaviour.Properties::noOcclusion)
         .lang("Creative Machine Core")
