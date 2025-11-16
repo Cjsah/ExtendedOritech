@@ -12,8 +12,17 @@ repositories {
     mavenLocal()
 }
 
+jar {
+    from(project.file("LICENSE")) {
+        rename { "${mod_id}_${it}" }
+    }
+    from(project.file("README.md")) {
+        rename { "${mod_id}_${it}" }
+    }
+}
+
 base {
-    archivesName = mod_id
+    archivesName = mod_name
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
