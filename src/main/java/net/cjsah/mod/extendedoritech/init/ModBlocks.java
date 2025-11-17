@@ -1,6 +1,7 @@
 package net.cjsah.mod.extendedoritech.init;
 
 import com.tterrag.registrate.util.entry.BlockEntry;
+import net.cjsah.mod.extendedoritech.block.PluginAddonExtenderBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -19,6 +20,12 @@ public class ModBlocks {
         .simpleItem()
         .register();
 
+    public static final BlockEntry<? extends Block> PLUGIN_ADDON_EXTENDER = REGISTRATE
+        .block("plugin_addon_extender", PluginAddonExtenderBlock::new)
+        .initialProperties(() -> Blocks.IRON_BLOCK)
+        .properties(BlockBehaviour.Properties::noOcclusion)
+        .simpleItem()
+        .register();
 
     public static void init() {
     }

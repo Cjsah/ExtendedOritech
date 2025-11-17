@@ -2,6 +2,7 @@ package net.cjsah.mod.extendedoritech;
 
 import com.mojang.logging.LogUtils;
 import com.tterrag.registrate.Registrate;
+import net.cjsah.mod.extendedoritech.init.ModBlockEntities;
 import net.cjsah.mod.extendedoritech.init.ModBlocks;
 import net.cjsah.mod.extendedoritech.init.ModCreativeTabs;
 import net.minecraft.resources.ResourceKey;
@@ -30,6 +31,7 @@ public class ExtendedOritech {
     public ExtendedOritech(IEventBus bus, ModContainer container, Dist dist) {
         ModCreativeTabs.register(bus);
         ModBlocks.init();
+        ModBlockEntities.init();
     }
 
 }
