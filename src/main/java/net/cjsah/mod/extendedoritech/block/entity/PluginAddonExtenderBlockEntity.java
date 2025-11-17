@@ -14,4 +14,5 @@ public class PluginAddonExtenderBlockEntity extends AddonBlockEntity {
     public PluginAddonExtenderBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
+
 }
