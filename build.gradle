@@ -161,6 +161,10 @@ var generateModMetadata = tasks.register("generateModMetadata", ProcessResources
 sourceSets.main.resources.srcDir generateModMetadata
 neoForge.ideSyncTask generateModMetadata
 
+processResources {
+    exclude '**/*.psd'
+}
+
 // Example configuration to allow publishing using the maven-publish plugin
 publishing {
     publications {
