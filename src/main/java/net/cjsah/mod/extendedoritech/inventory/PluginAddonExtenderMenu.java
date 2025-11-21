@@ -1,5 +1,6 @@
 package net.cjsah.mod.extendedoritech.inventory;
 
+import net.cjsah.mod.extendedoritech.ExtendedOritech;
 import net.cjsah.mod.extendedoritech.block.entity.PluginAddonExtenderBlockEntity;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -55,9 +56,44 @@ public class PluginAddonExtenderMenu extends AbstractContainerMenu implements Co
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int i) {
-        return ItemStack.EMPTY;
+    public ItemStack quickMoveStack(Player player, int index) {
+        Slot slot = this.slots.get(index);
+        if (!slot.hasItem()) return ItemStack.EMPTY;
+        ItemStack slotItem = slot.getItem();
+        ItemStack backupItem = slotItem.copy();
+        if (!this.quickMoveStack(index, slotItem)) {
+            return ItemStack.EMPTY;
+        }
+
+        if (slotItem.getCount() == 0) {
+            slot.set(ItemStack.EMPTY);
+        } else {
+            slot.setChanged();
+        }
+
+        if (slotItem.getCount() == backupItem.getCount()) {
+            return ItemStack.EMPTY;
+        }
+        slot.onTake(player, backupItem);
+        return backupItem;
     }
+
+    private boolean quickMoveStack(int index, ItemStack stack) {
+        if (index == 0) {
+            return this.moveItemStackTo(stack, 1, 37, true);
+        } else if (index < 37) {
+            if (this.moveItemStackTo(stack, 0, 1, false)) return true;
+            if (index < 28) {
+                return this.moveItemStackTo(stack, 28, 37, false);
+            } else {
+                return this.moveItemStackTo(stack, 1, 28, false);
+            }
+        } else {
+            ExtendedOritech.LOGGER.warn("Invalid slot {} on Plugin Addon Extender.", index);
+            return false;
+        }
+    }
+
 
     @Override
     public boolean stillValid(Player player) {
