@@ -24,6 +24,8 @@ public class PluginAddonExtenderMenu extends AbstractContainerMenu {
     public PluginAddonExtenderMenu(MenuType<?> menuType, int containerId, Inventory inventory, PluginAddonExtenderBlockEntity blockEntity) {
         super(menuType, containerId);
 //        checkContainerDataCount(sync, 4);
+        System.out.println("===opened");
+
         this.blockEntity = blockEntity;
         this.inventory = inventory;
         this.level = inventory.player.level();
@@ -54,6 +56,7 @@ public class PluginAddonExtenderMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
+        System.out.println("===valid");
         return ContainerLevelAccess.create(this.level, this.blockEntity.getBlockPos())
             .evaluate((level, pos) -> player.canInteractWithBlock(pos, 4.0F), true);
     }

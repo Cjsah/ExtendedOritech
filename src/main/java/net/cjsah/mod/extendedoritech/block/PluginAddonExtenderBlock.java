@@ -2,10 +2,13 @@ package net.cjsah.mod.extendedoritech.block;
 
 import net.cjsah.mod.extendedoritech.block.entity.PluginAddonExtenderBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rearth.oritech.block.blocks.addons.MachineAddonBlock;
@@ -28,5 +31,15 @@ public class PluginAddonExtenderBlock extends MachineAddonBlock {
     @Override
     protected @Nullable MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
         return super.getMenuProvider(state, level, pos);
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+        if (player.isSpectator()) return InteractionResult.PASS;
+        if (level.isClientSide) return InteractionResult.SUCCESS;
+        if (level.getBlockEntity(pos) instanceof PluginAddonExtenderBlockEntity blockEntity) {
+            player.openMenu(blockEntity, pos);
+        }
+        return InteractionResult.SUCCESS;
     }
 }
