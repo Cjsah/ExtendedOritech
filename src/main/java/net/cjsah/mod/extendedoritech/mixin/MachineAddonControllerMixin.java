@@ -32,7 +32,7 @@ public interface MachineAddonControllerMixin {
             return;
         }
 
-        var speed = 1f;
+         var speed = 1f;
         var efficiency = 1f;
         var energyAmount = 0L;
         var energyInsert = 0L;
@@ -59,8 +59,8 @@ public interface MachineAddonControllerMixin {
                 MachineAddonBlock.AddonSettings settings = be.getSettings();
 
                 if (Oritech.CONFIG.additiveAddons()) {
-                    speed += 1 - settings.speedMultiplier();
-                    efficiency += 1 - settings.efficiencyMultiplier();
+                    speed += settings.speedMultiplier();
+                    efficiency += settings.efficiencyMultiplier();
                 } else {
                     speed *= settings.speedMultiplier();
                     efficiency *= settings.efficiencyMultiplier();
