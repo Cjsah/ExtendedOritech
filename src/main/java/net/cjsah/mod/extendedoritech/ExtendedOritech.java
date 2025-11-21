@@ -5,6 +5,7 @@ import com.tterrag.registrate.Registrate;
 import net.cjsah.mod.extendedoritech.init.ModBlockEntities;
 import net.cjsah.mod.extendedoritech.init.ModBlocks;
 import net.cjsah.mod.extendedoritech.init.ModCreativeTabs;
+import net.cjsah.mod.extendedoritech.init.ModMenuTypes;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -32,6 +33,7 @@ public class ExtendedOritech {
         ModCreativeTabs.register(bus);
         ModBlocks.init();
         ModBlockEntities.init();
+        ModMenuTypes.init();
     }
 
 }

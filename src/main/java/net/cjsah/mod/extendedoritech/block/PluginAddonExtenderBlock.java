@@ -2,6 +2,8 @@ package net.cjsah.mod.extendedoritech.block;
 
 import net.cjsah.mod.extendedoritech.block.entity.PluginAddonExtenderBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.MenuProvider;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
@@ -23,4 +25,8 @@ public class PluginAddonExtenderBlock extends MachineAddonBlock {
         return new PluginAddonExtenderBlockEntity(pos, state);
     }
 
+    @Override
+    protected @Nullable MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
+        return super.getMenuProvider(state, level, pos);
+    }
 }
