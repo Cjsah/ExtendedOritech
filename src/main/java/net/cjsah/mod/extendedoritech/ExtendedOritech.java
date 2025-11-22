@@ -8,9 +8,7 @@ import net.cjsah.mod.extendedoritech.init.ModBlockEntities;
 import net.cjsah.mod.extendedoritech.init.ModBlocks;
 import net.cjsah.mod.extendedoritech.init.ModCreativeTabs;
 import net.cjsah.mod.extendedoritech.init.ModMenuTypes;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.CreativeModeTab;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
@@ -25,7 +23,7 @@ public class ExtendedOritech {
 
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final Registrate REGISTRATE = Registrate.create(MODID).defaultCreativeTab((ResourceKey<CreativeModeTab>) null);
+    public static final Registrate REGISTRATE = Registrate.create(MODID);
 
     public static ResourceLocation of(String path) {
         return ResourceLocation.fromNamespaceAndPath(MODID, path);

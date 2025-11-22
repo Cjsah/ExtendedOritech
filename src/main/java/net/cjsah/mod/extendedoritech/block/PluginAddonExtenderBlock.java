@@ -1,6 +1,7 @@
 package net.cjsah.mod.extendedoritech.block;
 
 import net.cjsah.mod.extendedoritech.block.entity.PluginAddonExtenderBlockEntity;
+import net.cjsah.mod.extendedoritech.init.ModBlockEntities;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
@@ -8,7 +9,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
@@ -19,8 +19,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rearth.oritech.block.blocks.addons.MachineAddonBlock;
-import rearth.oritech.init.BlockContent;
-import rearth.oritech.util.TooltipHelper;
 
 import java.util.List;
 
@@ -36,7 +34,7 @@ public class PluginAddonExtenderBlock extends MachineAddonBlock {
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new PluginAddonExtenderBlockEntity(pos, state);
+        return new PluginAddonExtenderBlockEntity(ModBlockEntities.PLUGIN_ADDON_EXTENDER.get(), pos, state);
     }
 
     @Override

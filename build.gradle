@@ -130,16 +130,16 @@ repositories {
 }
 
 dependencies {
-    implementation "rearth.oritech:oritech-neoforge-${mc_version}:${oritech_version}"
-
     api "com.tterrag.registrate:Registrate:${registrate_version}"
     jarJar "com.tterrag.registrate:Registrate:${registrate_version}"
+
+    implementation "rearth.oritech:oritech-neoforge-${mc_version}:${oritech_version}"
 
     runtimeOnly "curse.maven:oritechthings-1166849:${oritech_things_version}"
 
     compileOnlyApi("mezz.jei:jei-1.21.1-common-api:${jei_version}") { transitive = false }
     compileOnlyApi("mezz.jei:jei-1.21.1-neoforge-api:${jei_version}") { transitive = false }
-    implementation("mezz.jei:jei-1.21.1-neoforge:${jei_version}") { transitive = false }
+    runtimeOnly("mezz.jei:jei-1.21.1-neoforge:${jei_version}") { transitive = false }
 }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {

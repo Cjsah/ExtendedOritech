@@ -37,11 +37,7 @@ public class PluginAddonExtenderBlockEntity extends AddonBlockEntity implements 
         .withSpeedMultiplier(0)
         .withEfficiencyMultiplier(0);
 
-    public PluginAddonExtenderBlockEntity(BlockPos pos, BlockState state) {
-        super(ModBlockEntities.PLUGIN_ADDON_EXTENDER.get(), pos, state);
-    }
-
-    public PluginAddonExtenderBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+    public PluginAddonExtenderBlockEntity(BlockEntityType<PluginAddonExtenderBlockEntity> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     }
 
