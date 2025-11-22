@@ -10,10 +10,12 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.Container;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -23,10 +25,17 @@ import org.jetbrains.annotations.Nullable;
 import rearth.oritech.Oritech;
 import rearth.oritech.block.blocks.addons.MachineAddonBlock;
 import rearth.oritech.block.entity.addons.AddonBlockEntity;
+import rearth.oritech.util.InventoryInputMode;
 import rearth.oritech.util.MachineAddonController;
+import rearth.oritech.util.ScreenProvider;
 
-public class PluginAddonExtenderBlockEntity extends AddonBlockEntity implements MenuProvider {
+import java.util.List;
+
+public class PluginAddonExtenderBlockEntity extends AddonBlockEntity implements MenuProvider, ScreenProvider {
     private final StackHandler itemStackHandler = new StackHandler(this);
+    private MachineAddonBlock.AddonSettings settings = MachineAddonBlock.AddonSettings.getDefaultSettings()
+        .withSpeedMultiplier(0)
+        .withEfficiencyMultiplier(0);
 
     public PluginAddonExtenderBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.PLUGIN_ADDON_EXTENDER.get(), pos, state);
@@ -39,6 +48,37 @@ public class PluginAddonExtenderBlockEntity extends AddonBlockEntity implements 
     @Override
     public void setChanged() {
         super.setChanged();
+
+        float speed = 0f;
+        float efficiency = 0f;
+        long energyAmount = 0L;
+        long energyInsert = 0L;
+        int extraChambers = 0;
+        int extraBurstTicks = 0;
+
+        ItemStack stack = this.itemStackHandler.getStackInSlot(0);
+        if (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof MachineAddonBlock addonBlock) {
+            MachineAddonBlock.AddonSettings addonSettings = addonBlock.getAddonSettings();
+            int count = Math.min(stack.getCount(), 16);
+            if (Oritech.CONFIG.additiveAddons()) {
+                speed = (1 - addonSettings.speedMultiplier()) * count;
+                efficiency = (1 - addonSettings.efficiencyMultiplier()) * count;
+            } else {
+                speed = (float) Math.pow(addonSettings.speedMultiplier(), count);
+                efficiency = (float) Math.pow(addonSettings.efficiencyMultiplier(), count);
+            }
+            energyAmount = addonSettings.addedCapacity() * count;
+            energyInsert = addonSettings.addedInsert() * count;
+            extraChambers = addonSettings.chamberCount() * count;
+            extraBurstTicks = addonSettings.burstTicks() * count;
+        }
+
+        this.settings = new MachineAddonBlock.AddonSettings(
+            false,
+            speed, efficiency, energyAmount, energyInsert,
+            false, true,
+            extraChambers, extraBurstTicks, null);
+
         if (this.level == null || this.level.isClientSide()) return;
         BlockPos pos = this.getControllerPos();
         if (!this.level.isLoaded(pos)) return;
@@ -48,30 +88,7 @@ public class PluginAddonExtenderBlockEntity extends AddonBlockEntity implements 
     }
 
     public MachineAddonBlock.AddonSettings getSettings() {
-        MachineAddonBlock.AddonSettings settings = MachineAddonBlock.AddonSettings.getDefaultSettings()
-            .withSpeedMultiplier(0)
-            .withEfficiencyMultiplier(0);
-        ItemStack stack = this.itemStackHandler.getStackInSlot(0);
-        if (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof MachineAddonBlock addonBlock) {
-            MachineAddonBlock.AddonSettings addonSettings = addonBlock.getAddonSettings();
-            int count = Math.min(stack.getCount(), 16);
-            if (Oritech.CONFIG.additiveAddons()) {
-                settings = settings
-                    .withSpeedMultiplier((1 - addonSettings.speedMultiplier()) * count)
-                    .withEfficiencyMultiplier((1 - addonSettings.efficiencyMultiplier()) * count);
-            } else {
-                settings = settings
-                    .withSpeedMultiplier((float) Math.pow(addonSettings.speedMultiplier(), count))
-                    .withEfficiencyMultiplier((float) Math.pow(addonSettings.efficiencyMultiplier(), count));
-            }
-            settings = settings
-                .withAddedCapacity(addonSettings.addedCapacity() * count)
-                .withAddedInsert(addonSettings.addedInsert() * count)
-                .withChambers(addonSettings.chamberCount() * count)
-                .withBurstTicks(addonSettings.burstTicks() * count);
-        }
-
-        return settings;
+        return this.settings;
     }
 
     @Override
@@ -86,7 +103,7 @@ public class PluginAddonExtenderBlockEntity extends AddonBlockEntity implements 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int i, Inventory inventory, Player player) {
         if (player.isSpectator()) return null;
-        return new PluginAddonExtenderMenu(ModMenuTypes.PLUGIN_ADDON_EXTENDER.get(), i, inventory, this);
+        return new PluginAddonExtenderMenu(i, inventory, this);
     }
 
     @Override
@@ -107,5 +124,44 @@ public class PluginAddonExtenderBlockEntity extends AddonBlockEntity implements 
         tag.put("Item", stack.save(provider, new CompoundTag()));
     }
 
+    @Override
+    public MenuType<?> getScreenHandlerType() {
+        return ModMenuTypes.PLUGIN_ADDON_EXTENDER.get();
+    }
+
+    @Override
+    public Container getDisplayedInventory() {
+        return this.itemStackHandler;
+    }
+
+    @Override
+    public List<GuiSlot> getGuiSlots() {
+        return List.of(new GuiSlot(0, 80, 35));
+    }
+
+    @Override
+    public InventoryInputMode getInventoryInputMode() {
+        return InventoryInputMode.FILL_LEFT_TO_RIGHT;
+    }
+
+    @Override
+    public boolean showEnergy() {
+        return false;
+    }
+
+    @Override
+    public boolean showProgress() {
+        return false;
+    }
+
+    @Override
+    public float getDisplayedEnergyUsage() {
+        return 0;
+    }
+
+    @Override
+    public float getProgress() {
+        return 0;
+    }
 
 }
