@@ -3,4 +3,4 @@
 ## TODO
 
 - [x] Add creative machine core
-- [ ] Add plugin addon extender
+- [x] Add plugin addon extender
