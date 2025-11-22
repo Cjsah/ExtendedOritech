@@ -1,5 +1,6 @@
 {
   "block.extendedoritech.machine_core_inf": "创造机器核心",
   "block.extendedoritech.plugin_addon_extender": "插件拓展坞",
-  "itemGroup.extendedoritech.tab": "Oritech 扩展"
+  "itemGroup.extendedoritech.tab": "Oritech 扩展",
+  "tooltip.extendedoritech.plugin_addon_extender": "允许插入更多的插件"
 }

@@ -1,10 +1,17 @@
 package net.cjsah.mod.extendedoritech.block;
 
 import net.cjsah.mod.extendedoritech.block.entity.PluginAddonExtenderBlockEntity;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -12,6 +19,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import rearth.oritech.block.blocks.addons.MachineAddonBlock;
+import rearth.oritech.init.BlockContent;
+import rearth.oritech.util.TooltipHelper;
+
+import java.util.List;
 
 public class PluginAddonExtenderBlock extends MachineAddonBlock {
     public PluginAddonExtenderBlock(Properties settings) {
@@ -41,5 +52,15 @@ public class PluginAddonExtenderBlock extends MachineAddonBlock {
             player.openMenu(blockEntity, pos);
         }
         return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, Item.TooltipContext context, List<Component> tooltip, TooltipFlag options) {
+        super.appendHoverText(stack, context, tooltip, options);
+
+        if (Screen.hasControlDown()) {
+            tooltip.add(Component.translatable("tooltip.extendedoritech.plugin_addon_extender").withStyle(ChatFormatting.GRAY));
+        }
+
     }
 }
