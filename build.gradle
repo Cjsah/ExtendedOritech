@@ -194,6 +194,6 @@ idea {
 
 tasks.register('projectName') {
     doLast {
-        println project.name
+        print project.name
     }
 }

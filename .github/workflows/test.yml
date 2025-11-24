@@ -33,6 +33,7 @@ jobs:
       - name: Test with Gradle
         run: |
           NAME=$(./gradlew -q projectName)
+          echo "Name: $NAME"
           echo "PROJECT_NAME=$NAME" >> $GITHUB_OUTPUT
 
       - name: Debug
