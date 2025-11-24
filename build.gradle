@@ -5,73 +5,14 @@ plugins {
     id 'net.neoforged.moddev' version '2.0.116'
 }
 
-version = mod_version
 group = mod_group_id
 
-repositories {
-    mavenLocal()
+def modVersion = System.getenv("BUILD_MOD_VERSION")
+def buildNumber = System.getenv("GITHUB_RUN_NUMBER")
+version = modVersion ?: mod_version
+if (buildNumber) {
+    version = version + "+build.${buildNumber}"
 }
-
-jar {
-    from(project.file("LICENSE")) {
-        rename { "${mod_id}_${it}" }
-    }
-    from(project.file("README.md")) {
-        rename { "${mod_id}_${it}" }
-    }
-}
-
-base {
-    archivesName = mod_name
-}
-
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
-
-neoForge {
-    version = project.neo_version
-
-    parchment {
-        mappingsVersion = project.parchment_mappings_version
-        minecraftVersion = project.parchment_version
-    }
-
-    runs {
-        client {
-            client()
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        }
-
-        server {
-            server()
-            programArgument '--nogui'
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        }
-
-        gameTestServer {
-            type = "gameTestServer"
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        }
-
-        data {
-            data()
-
-            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
-        }
-
-        configureEach {
-            systemProperty 'forge.logging.markers', 'REGISTRIES'
-            logLevel = org.slf4j.event.Level.DEBUG
-        }
-    }
-
-    mods {
-        "${mod_id}" {
-            sourceSet(sourceSets.main)
-        }
-    }
-}
-
-sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
     mavenCentral()
@@ -141,6 +82,67 @@ dependencies {
     compileOnlyApi("mezz.jei:jei-1.21.1-neoforge-api:${jei_version}") { transitive = false }
     runtimeOnly("mezz.jei:jei-1.21.1-neoforge:${jei_version}") { transitive = false }
 }
+
+jar {
+    from(project.file("LICENSE")) {
+        rename { "${mod_id}_${it}" }
+    }
+    from(project.file("README.md")) {
+        rename { "${mod_id}_${it}" }
+    }
+}
+
+base {
+    archivesName = mod_name
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+neoForge {
+    version = project.neo_version
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_version
+    }
+
+    runs {
+        client {
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        server {
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        gameTestServer {
+            type = "gameTestServer"
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        data {
+            data()
+
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
     var replaceProperties = [minecraft_version      : mc_version,
