@@ -191,3 +191,9 @@ idea {
         downloadJavadoc = true
     }
 }
+
+tasks.register('projectName') {
+    doLast {
+        println project.name
+    }
+}
