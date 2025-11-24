@@ -35,6 +35,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Fetch with Gradle
+        id: name
         run: |
           NAME=$(./gradlew -q projectName)
           echo "PROJECT_NAME=$NAME" >> $GITHUB_OUTPUT
