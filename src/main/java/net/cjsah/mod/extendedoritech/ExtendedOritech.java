@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 import com.tterrag.registrate.Registrate;
 import com.tterrag.registrate.providers.ProviderType;
 import net.cjsah.mod.extendedoritech.datagen.ModLangProvider;
+import net.cjsah.mod.extendedoritech.datagen.ModRecipeProvider;
 import net.cjsah.mod.extendedoritech.init.ModBlockEntities;
 import net.cjsah.mod.extendedoritech.init.ModBlocks;
 import net.cjsah.mod.extendedoritech.init.ModCreativeTabs;
@@ -36,6 +37,7 @@ public class ExtendedOritech {
         ModMenuTypes.init();
 
         REGISTRATE.addDataGenerator(ProviderType.LANG, ModLangProvider::register);
+        REGISTRATE.addDataGenerator(ProviderType.RECIPE, ModRecipeProvider::register);
     }
 
 }
