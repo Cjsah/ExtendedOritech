@@ -27,29 +27,18 @@ jobs:
           path: gradle.properties
           properties: mc_version mc_version_range mod_name
 
-      - name: Get version
-        id: version
-        run: |
-          echo "version=${{ github.event.release.tag_name }}+build.$GITHUB_RUN_NUMBER" >> $GITHUB_OUTPUT
-
-      - name: Grant execute permission
-        run: chmod +x gradlew
-
-      - name: Fetch with Gradle
-        id: name
-        run: |
-          NAME=$(./gradlew -q projectName)
-          echo "project_name=$NAME" >> $GITHUB_OUTPUT
-
       - name: Get build info
         id: info
         run: |
           echo "main_version=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
           echo "version=${{ github.event.release.tag_name }}+build.$GITHUB_RUN_NUMBER" >> $GITHUB_OUTPUT
-          echo "file=build/libs/${{ steps.name.outputs.project_name }}-${{ github.event.release.tag_name }}+build.$GITHUB_RUN_NUMBER.jar" >> $GITHUB_OUTPUT
           echo "mc_version=${{ steps.properties.outputs.mc_version }}" >> $GITHUB_OUTPUT
           echo "mc_version_range=${{ steps.properties.outputs.mc_version_range }}" >> $GITHUB_OUTPUT
           echo "mod_name=${{ steps.properties.outputs.mod_name }}" >> $GITHUB_OUTPUT
+          echo "file=build/libs/${{ steps.properties.outputs.mod_name }}-${{ github.event.release.tag_name }}+build.$GITHUB_RUN_NUMBER.jar" >> $GITHUB_OUTPUT
+
+      - name: Grant execute permission
+        run: chmod +x gradlew
 
       - name: Generate asset resource
         run: ./gradlew runData

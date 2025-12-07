@@ -16,16 +16,21 @@ jobs:
           distribution: 'zulu'
 
       - name: Read gradle properties
-        id: properties_v
+        id: properties
         uses: christian-draeger/read-properties@1.1.1
         with:
           path: gradle.properties
-          properties: mod_version mc_version mc_version_range
+          properties: mc_version mc_version_range mod_name
 
-      - name: Get version
-        id: version
+      - name: Get build info
+        id: info
         run: |
-          echo "version=${{ steps.properties_v.outputs.mod_version }}+build.$GITHUB_RUN_NUMBER" >> $GITHUB_OUTPUT
+          echo "main_version=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+          echo "version=${{ github.event.release.tag_name }}+build.$GITHUB_RUN_NUMBER" >> $GITHUB_OUTPUT
+          echo "mc_version=${{ steps.properties.outputs.mc_version }}" >> $GITHUB_OUTPUT
+          echo "mc_version_range=${{ steps.properties.outputs.mc_version_range }}" >> $GITHUB_OUTPUT
+          echo "mod_name=${{ steps.properties.outputs.mod_name }}" >> $GITHUB_OUTPUT
+          echo "file=build/libs/${{ steps.properties.outputs.mod_name }}-${{ github.event.release.tag_name }}+build.$GITHUB_RUN_NUMBER.jar" >> $GITHUB_OUTPUT
 
       - name: Grant execute permission
         run: chmod +x gradlew
@@ -39,5 +44,5 @@ jobs:
       - name: Publish artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: Artifacts for ${{ steps.version.outputs.version }}
+          name: Artifacts for ${{ steps.info.outputs.version }}
           path: build/libs/
