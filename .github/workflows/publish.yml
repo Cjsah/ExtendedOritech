@@ -21,16 +21,16 @@ jobs:
           distribution: 'zulu'
 
       - name: Read gradle properties
-        id: properties_v
+        id: properties
         uses: christian-draeger/read-properties@1.1.1
         with:
           path: gradle.properties
-          properties: mod_version mc_version mc_version_range
+          properties: mc_version mc_version_range mod_name
 
       - name: Get version
         id: version
         run: |
-          echo "version=${{ steps.properties_v.outputs.mod_version }}+build.$GITHUB_RUN_NUMBER" >> $GITHUB_OUTPUT
+          echo "version=${{ github.event.release.tag_name }}+build.$GITHUB_RUN_NUMBER" >> $GITHUB_OUTPUT
 
       - name: Grant execute permission
         run: chmod +x gradlew
@@ -39,7 +39,17 @@ jobs:
         id: name
         run: |
           NAME=$(./gradlew -q projectName)
-          echo "PROJECT_NAME=$NAME" >> $GITHUB_OUTPUT
+          echo "project_name=$NAME" >> $GITHUB_OUTPUT
+
+      - name: Get build info
+        id: info
+        run: |
+          echo "main_version=${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+          echo "version=${{ github.event.release.tag_name }}+build.$GITHUB_RUN_NUMBER" >> $GITHUB_OUTPUT
+          echo "file=build/libs/${{ steps.name.outputs.project_name }}-${{ github.event.release.tag_name }}+build.$GITHUB_RUN_NUMBER.jar" >> $GITHUB_OUTPUT
+          echo "mc_version=${{ steps.properties.outputs.mc_version }}" >> $GITHUB_OUTPUT
+          echo "mc_version_range=${{ steps.properties.outputs.mc_version_range }}" >> $GITHUB_OUTPUT
+          echo "mod_name=${{ steps.properties.outputs.mod_name }}" >> $GITHUB_OUTPUT
 
       - name: Generate asset resource
         run: ./gradlew runData
@@ -51,27 +61,26 @@ jobs:
         uses: softprops/action-gh-release@v0.1.15
         with:
           files: |
-            build/libs/${{ steps.name.outputs.PROJECT_NAME }}-${{ steps.version.outputs.version }}.jar
+            ${{ steps.info.outputs.file }}
 
-#      - name: publish neoforge mc mod
-#        uses: Kir-Antipov/mc-publish@v3.3
-#        continue-on-error: true
-#        with:
-#          name: "${{ steps.properties.outputs.mod_name }} For NeoForge v${{ steps.version.outputs.version }}"
-#          version: ${{ steps.version.outputs.version }}
-#          game-versions: 1.21.1
-#          version-type: ${{ env.VERSION_TYPE }}
-#          java: 21
-#          fail-mode: skip
-#          changelog: ${{ github.event.release.body }}
-#
-#          modrinth-id: vuISAWPc
-#          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-#          modrinth-featured: true
-#
-#          curseforge-id: 986251
-#          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
-#
-#          files: |
-#            build/libs/anvilcraft-neoforge-${{ steps.version.outputs.version }}.jar
-#            build/libs/anvilcraft-neoforge-${{ steps.version.outputs.version }}-sources.jar
+      - name: publish neoforge mc mod
+        uses: Kir-Antipov/mc-publish@v3.3
+        continue-on-error: true
+        with:
+          name: "${{ steps.info.outputs.mod_name }} v${{ steps.info.outputs.main_version }}"
+          version: ${{ steps.info.outputs.version }}
+          game-versions: ${{ steps.info.outputs.support_mc_versions }}
+          version-type: release
+          java: 21
+          fail-mode: skip
+          changelog: ${{ github.event.release.body }}
+
+          modrinth-id: 9woy7tni
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          modrinth-featured: true
+
+          curseforge-id: 1390979
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+
+          files: |
+            ${{ steps.info.outputs.file }}
