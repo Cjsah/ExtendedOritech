@@ -41,10 +41,11 @@ jobs:
           NAME=$(./gradlew -q projectName)
           echo "PROJECT_NAME=$NAME" >> $GITHUB_OUTPUT
 
+      - name: Generate asset resource
+        run: ./gradlew runData
+
       - name: Build with Gradle
-        run: |
-          ./gradlew runData
-          ./gradlew build
+        run: ./gradlew build
 
       - name: Upload Release Jar
         uses: softprops/action-gh-release@v0.1.15
