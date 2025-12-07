@@ -191,9 +191,3 @@ idea {
         downloadJavadoc = true
     }
 }
-
-tasks.register('projectName') {
-    doLast {
-        print project.name
-    }
-}

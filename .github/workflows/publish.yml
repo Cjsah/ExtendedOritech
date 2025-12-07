@@ -64,7 +64,7 @@ jobs:
           fail-mode: skip
           changelog: ${{ github.event.release.body }}
 
-          modrinth-id: 9woy7tni
+          modrinth-id: 1VTABZze
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           modrinth-featured: true
 
