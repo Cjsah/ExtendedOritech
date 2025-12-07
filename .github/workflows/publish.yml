@@ -57,7 +57,7 @@ jobs:
         continue-on-error: true
         with:
           name: "${{ steps.info.outputs.mod_name }} v${{ steps.info.outputs.main_version }}"
-          version: ${{ steps.info.outputs.version }}
+          version: ${{ steps.info.outputs.main_version }}
           game-versions: ${{ steps.info.outputs.support_mc_versions }}
           version-type: release
           java: 21
