@@ -42,7 +42,7 @@ jobs:
           echo "PROJECT_NAME=$NAME" >> $GITHUB_OUTPUT
 
       - name: Build with Gradle
-        run: ./gradlew build
+        run: ./gradlew runData build
 
       - name: Upload Release Jar
         uses: softprops/action-gh-release@v0.1.15
